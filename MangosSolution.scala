@@ -27,16 +27,20 @@ object MangosSolution {
         return result
     }
 
-    /** Get all the subsets of sriends you could possible invite
-     * 
-     *  @param n total number of friends you have
+
+    /** Finds the max number of invities that you can invite to your party
+     *
+     *  @param n total number of friends
+     *  @param m total number of mangos 
+     *  @param a appetite of all friends
+     *  @param h hapiness factor of all friends
      */
-    def getFriendGroups(n: Int): List[List[Int]] = {
+    def getMaxInvitees(n: Int, m: Long, a: List[Int], h: List[Int]): Int = {
+        // get all combinations of friends using a binary counter
         val superset = (0 until n).toList
         val totalSets = scala.math.pow(2, superset.length).toInt
-        val result = ListBuffer[List[Int]]()
-
-        // use a binary counter to iterratively get all subsets
+        var max = 0
+        
         for(i <- 1 until totalSets) {
             val subset = ListBuffer[Int]()
             for (p <- 0 until n) {
@@ -45,42 +49,26 @@ object MangosSolution {
                     subset += superset(p)
                 }
             }
-
-            result += subset.toList
-        }
-        // println(result)
-
-        return result.toList
-    }
-
-    /** Finds the max number of invities that you can invite to your party
-     *
-     *  @param n total number of friends
-     *  @param n total number of mangos 
-     *  @param a appetite of all friends
-     *  @param h hapiness factor of all friends
-     */
-    def getMaxInvitees(n: Int, m: Long, a: List[Int], h: List[Int]): Int = {
-        // get all combinations of friends and sort by descending length
-        var groups = getFriendGroups(n).sortWith(_.length > _.length)
-
-        for (f <- groups) {
-            if (getConsumption(f, a, h) <= m) {
-                return f.length
+            val c = getConsumption(subset.toList, a, h)
+            val size = subset.length
+            if (c <= m && size > max) {
+                max = size
             }
         }
 
-        // if friends will be satisfied by the numer of magoes you have, you can't invite anyone
-        return 0
+        return max
     }
 
+
     def runTest(expected: Int, n: Int, m: Long, a: List[Int], h: List[Int]) = {
+        val t0 = System.nanoTime()
         val max = getMaxInvitees(n, m, a, h)
+        val t1 = System.nanoTime()
 
         if (expected == max) {
-            println(s"PASS :: max == $max ($expected enxpected)")
+            println(s"PASS :: max == $max ($expected enxpected) in ${t1 - t0}ns")
         } else {
-            println(s"FAIL :: max == $max ($expected enxpected)")
+            println(s"FAIL :: max == $max ($expected enxpected) in ${t1 - t0}ns")
         }
     }
 
