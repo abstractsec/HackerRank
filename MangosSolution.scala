@@ -13,18 +13,9 @@ object MangosSolution {
      *  @param h hapiness factor of all friends
      */
     def getConsumption(f: List[Int], a: List[Int], h: List[Int]): Int = {
-        // if no fiends are invited, you won't eat any mangoes
-        if (f.length < 1) {
-            return 0
-        }
-
         // calculate the consumption for the friends you invited
         val p = f.length - 1
-        var result = 0
-        for(i <- f) {
-            result += (a(i) + p*h(i))
-        }
-        return result
+        return f.map(a(_) + p*h(_)).sum
     }
 
 
@@ -49,9 +40,9 @@ object MangosSolution {
                     subset += superset(p)
                 }
             }
-            val c = getConsumption(subset.toList, a, h)
+            
             val size = subset.length
-            if (c <= m && size > max) {
+            if (size > max && getConsumption(subset.toList, a, h) <= m) {
                 max = size
             }
         }
