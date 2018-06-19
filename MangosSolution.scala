@@ -1,6 +1,6 @@
 import scala.collection.mutable.ListBuffer
 
-/** Solution for Mangies problem decriber in ./mangoes.md
+/** Solution for Mangos problem decriber in ./mangos.md
  *
  * Currently solves the problem naievly by calculating the comsumption of each combination
  * of friends that could be invited, and determining the size of the largest acceptable group.
